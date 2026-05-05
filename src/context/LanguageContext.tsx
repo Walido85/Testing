@@ -20,6 +20,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode; initialLang
 
   const [lang, setLang] = useState<Language>(() => {
     if (initialLang) return initialLang;
+    if (typeof window === 'undefined') return 'ar';
     const parts = location.pathname.split('/');
     const p1 = parts[1];
     if (p1 === 'ar' || p1 === 'fr' || p1 === 'en') return p1 as Language;
@@ -28,18 +29,15 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode; initialLang
 
   useEffect(() => {
     setMounted(true);
-    const parts = location.pathname.split('/');
-    const p1 = parts[1];
-    if (p1 === 'ar' || p1 === 'fr' || p1 === 'en') {
-      const detected = p1 as Language;
-      setLang(detected);
-      if (i18n.language !== detected) {
-        i18n.changeLanguage(detected);
+    if (initialLang && lang !== initialLang) {
+      setLang(initialLang);
+      if (i18n.language !== initialLang) {
+        i18n.changeLanguage(initialLang);
       }
-      document.documentElement.lang = detected;
-      document.documentElement.dir = detected === 'ar' ? 'rtl' : 'ltr';
+      document.documentElement.lang = initialLang;
+      document.documentElement.dir = initialLang === 'ar' ? 'rtl' : 'ltr';
     }
-  }, [location.pathname, i18n]);
+  }, [initialLang, i18n]);
 
   const switchLanguage = (newLang: Language) => {
     const pathParts = location.pathname.split('/');

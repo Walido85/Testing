@@ -62,14 +62,9 @@ function NavigationContent({ pageName, initialData, params, url }: { pageName: s
   const { lang } = useLanguage();
   const { user } = useAuth();
   const navigate = useAstroNavigate();
-  const { isDarkMode, toggleDarkMode } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const { isDarkMode, toggleDarkMode, mounted } = useTheme();
   const [isLangOpen, setIsLangOpen] = useState(false);
   const langRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const languages = [
     { code: 'en', label: 'EN', fullLabel: 'English', flag: 'https://flagcdn.com/us.svg' },
@@ -90,9 +85,7 @@ function NavigationContent({ pageName, initialData, params, url }: { pageName: s
       setClientLocation({ pathname: window.location.pathname, search: window.location.search });
     };
     
-    // Astro view transitions event
     document.addEventListener('astro:page-load', handleUrlChange);
-    // Standard history events
     window.addEventListener('popstate', handleUrlChange);
     
     return () => {
@@ -149,6 +142,14 @@ function NavigationContent({ pageName, initialData, params, url }: { pageName: s
 
   const PageComponent = (pages as any)[pageName] || pages.Home;
 
+  if (!mounted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg-color)' }}>
+        <div className="w-8 h-8 border-4 border-[var(--accent-color)] border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
   return (
     <>
       {/* ===== MOBILE HEADER ===== */}
@@ -183,7 +184,7 @@ function NavigationContent({ pageName, initialData, params, url }: { pageName: s
               style={{ color: 'var(--text-color)' }}
               title={isDarkMode ? t('Light Mode') : t('Dark Mode')}
             >
-              {mounted ? (isDarkMode ? <Sun className="w-6 h-6" /> : <Moon className="w-6 h-6" />) : <div className="w-6 h-6" />}
+              {isDarkMode ? <Sun className="w-6 h-6" /> : <Moon className="w-6 h-6" />}
             </button>
 
             <div className="relative" ref={langRef}>
@@ -205,7 +206,7 @@ function NavigationContent({ pageName, initialData, params, url }: { pageName: s
               </button>
 
               {isLangOpen && (
-                <div className={`absolute top-[max(100%,_2rem)] rounded-xl shadow-2xl py-2 min-w-[140px] z-[9999] bg-[var(--card-bg)] border border-[var(--border-color)] animate-in fade-in zoom-in duration-150 ${i18n.language === 'ar' ? 'left-0' : 'right-0'}`}>
+                <div className={`absolute top-[max(100%,_2rem)] rounded-xl shadow-2xl py-2 min-w-[140px] z-[9999] bg-[var(--card-bg)] border border-[var(--border-color)] animate-in fade-in zoom-in-95`}>
                   {otherLanguages.map((lang) => (
                     <button
                       key={lang.code}
@@ -252,10 +253,11 @@ function NavigationContent({ pageName, initialData, params, url }: { pageName: s
                 (!isHomePath && location.pathname.startsWith(item.path))
               );
 
-              const className = `text-base font-bold transition-colors h-full flex items-center border-b-[3px] px-1 ${isActive
+              const className = `text-base font-bold transition-colors h-full flex items-center border-b-[3px] px-1 ${
+                isActive
                   ? 'text-[var(--accent-color)] border-[var(--accent-color)]'
                   : 'border-transparent hover:text-[var(--accent-color)] focus:text-[var(--accent-color)] opacity-80 hover:opacity-100 focus:opacity-100'
-                }`;
+              }`;
 
               const style = {
                 color: isActive ? 'var(--accent-color)' : 'var(--text-color)'
@@ -347,10 +349,11 @@ function NavigationContent({ pageName, initialData, params, url }: { pageName: s
                     </>
                   );
 
-                  const className = `flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all ${isActive
+                  const className = `flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all ${
+                    isActive
                       ? 'bg-[var(--accent-color)] text-white shadow-lg'
                       : 'hover:bg-[var(--hover-bg)]'
-                    }`;
+                  }`;
 
                   const style = {
                     color: isActive ? 'white' : 'var(--text-color)'
@@ -416,7 +419,6 @@ function NavigationContent({ pageName, initialData, params, url }: { pageName: s
 }
 
 export default function AppShell({ pageName, url, initialData, lang, ...rest }: any) {
-  // Manually extract params from URL for components that expect them
   const params = { ...rest };
   if (url) {
     const parts = url.split('/').filter(Boolean);
