@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 
-import { Link, useAstroNavigate } from "../utils/navigation";
+import { Link } from "../utils/navigation";
 import { collection, query, where, getDocs, limit, orderBy } from "firebase/firestore";
 import { db } from "../firebase";
 import { Station } from "../types";
 import { useTranslation } from "react-i18next";
 import { usePlayer } from "../context/PlayerContext";
-import { Play, Pause, Loader2, Heart, Music, MapPin, Activity, Info, Newspaper, Radio, Sparkles, Gem } from "lucide-react";
+import { Play, Pause, Loader2, Heart, Music, MapPin, Activity, Info, Newspaper, Radio, Gem } from "lucide-react";
 import SEO from "../components/SEO";
 
 function timeAgo(timestamp: number | any, t: any, isArabic: boolean) {
@@ -23,12 +23,9 @@ function timeAgo(timestamp: number | any, t: any, isArabic: boolean) {
     : date.toLocaleDateString();
 }
 
-export default function RadioDetail({ initialData, slug, lang: propLang }: { initialData?: Station, slug?: string, lang?: string }) {
+export default function RadioDetail({ initialData, slug }: { initialData?: Station, slug?: string, lang?: string }) {
   const { t, i18n } = useTranslation();
-  const lang = propLang || i18n.language;
-
   const { playRadio, togglePlay, currentStream, isPlaying, favorites, toggleFavorite } = usePlayer();
-  const navigate = useAstroNavigate();
   const langPrefix = i18n.language.slice(0, 2).toLowerCase();
   
   const [station, setStation] = useState<Station | null>(initialData || null);

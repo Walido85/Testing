@@ -5,7 +5,7 @@ import React, {
   useRef,
   useMemo,
 } from "react";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import {
   Tv,
@@ -13,18 +13,14 @@ import {
   Loader2,
   AlertCircle,
   X,
-  ChevronLeft,
   ChevronRight,
-  Maximize2,
   Info,
   Heart,
   Share2,
   Search,
-  History,
   TrendingUp,
   Globe,
   ShieldCheck,
-  Crown,
   Trophy,
   Newspaper,
   Clapperboard,
@@ -125,97 +121,18 @@ const getBaseViewerCount = (id: string, genre: string) => {
   return Math.floor(base * timeMult);
 };
 
-// Dynamic "Now on Air" generator
-const PROGRAMS = {
-  NEWS: [
-    "Main Bulletin",
-    "Morning News",
-    "Evening Debate",
-    "Global Report",
-    "Business Today",
-    "Breaking Highlights",
-    "Tunisia Today",
-    "World at 8",
-    "The Front Page",
-  ],
-  SPORT: [
-    "Live Match Day",
-    "Sports Talk",
-    "Football Legends",
-    "Extreme Action",
-    "Championship Review",
-    "Goal Highlights",
-    "Court Side",
-    "The Warm Up",
-  ],
-  MOVIE: [
-    "Action Hour",
-    "Drama Night",
-    "Classic Cinema",
-    "Blockbuster Premiere",
-    "Thriller Late",
-    "Hollywood Hits",
-    "Romantic Escapes",
-    "Indie Spotlight",
-  ],
-  KID: [
-    "Cartoons Club",
-    "Adventure Time",
-    "Learning Fun",
-    "Bedtime Stories",
-    "Morning Kids",
-    "Superhero Morning",
-    "Nature Discovery",
-    "Toy Box",
-  ],
-  MUSIC: [
-    "Top 40 Countdown",
-    "Classic Hits",
-    "Jazz Evening",
-    "Pop Live",
-    "Rock Anthems",
-    "Retro Mix",
-    "Unplugged Sessions",
-  ],
-  GENERAL: [
-    "Daily Life",
-    "Variety Show",
-    "Documentary Hour",
-    "Talk Tunisia",
-    "Cooking Live",
-    "Travel Diary",
-    "Home & Garden",
-    "Game Show Night",
-  ],
-};
 
-const getNowOnAir = (genre: string, id: string) => {
-  const g = (genre || "GENERAL").toUpperCase();
-  let list = PROGRAMS.GENERAL;
-  if (g.includes("NEWS")) list = PROGRAMS.NEWS;
-  else if (g.includes("MOVIE") || g.includes("FILM")) list = PROGRAMS.MOVIE;
-  else if (g.includes("SPORT")) list = PROGRAMS.SPORT;
-  else if (g.includes("KID") || g.includes("CHILD")) list = PROGRAMS.KID;
-  else if (g.includes("MUSIC")) list = PROGRAMS.MUSIC;
-
-  const hour = new Date().getHours();
-  const hash = id.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
-  const index = (hash + hour) % list.length;
-  return list[index];
-};
 
 const HeroVideo = ({
   channel,
   isActive,
   getPlayerUrl,
   getPlayerType,
-  t,
 }: {
   channel: Channel;
   isActive: boolean;
   getPlayerUrl: (c: Channel) => string;
   getPlayerType: (url: string) => string;
-  t: any;
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<any>(null);
@@ -339,23 +256,6 @@ const getInitials = (name: string) => {
     .toUpperCase();
 };
 
-const getInitialsBg = (name: string) => {
-  const colors = [
-    "linear-gradient(135deg, #FF6B6B 0%, #EE5253 100%)",
-    "linear-gradient(135deg, #4834D4 0%, #686DE0 100%)",
-    "linear-gradient(135deg, #6AB04C 0%, #BAD2D8 100%)",
-    "linear-gradient(135deg, #F0932B 0%, #FFBE76 100%)",
-    "linear-gradient(135deg, #130F40 0%, #30336B 100%)",
-    "linear-gradient(135deg, #22A6B3 0%, #7ED6DF 100%)",
-    "linear-gradient(135deg, #E056FD 0%, #BE2EDD 100%)",
-    "linear-gradient(135deg, #FC5C65 0%, #EB3B5A 100%)"
-  ];
-  let hash = 0;
-  for (let i = 0; i < (name || "TV").length; i++) {
-    hash = (name || "TV").charCodeAt(i) + ((hash << 5) - hash);
-  }
-  return colors[Math.abs(hash) % colors.length];
-};
 
 export const getGenreConfig = (genre: string) => {
   const g = (genre || "").toLowerCase();
@@ -375,7 +275,7 @@ export default function LiveTV() {
   const { t, i18n } = useTranslation();
   const lang = i18n.language || "en";
   const isArabic = i18n.language === "ar";
-  const { closePlayer, isPlaying: isRadioPlaying } = usePlayer();
+  const { closePlayer } = usePlayer();
   const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : new URLSearchParams();
   const setSearchParams = (params: URLSearchParams) => {
     const newUrl = window.location.pathname + '?' + params.toString();
@@ -385,7 +285,7 @@ export default function LiveTV() {
 
   const [channels, setChannels] = useState<Channel[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
   const [selectedChannel, setSelectedChannel] = useState<Channel | null>(null);
   const [playerError, setPlayerError] = useState<string | null>(null);
   const [isBuffering, setIsBuffering] = useState(true);
@@ -413,8 +313,6 @@ export default function LiveTV() {
   const [selectedCountry, setSelectedCountry] = useState<string | null>(
     searchParams.get("country"),
   );
-  const urlChannelId = searchParams.get("channel");
-
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<any>(null);
 
@@ -990,7 +888,6 @@ export default function LiveTV() {
                 isActive={true}
                 getPlayerUrl={getPlayerUrl}
                 getPlayerType={getPlayerType}
-                t={t}
               />
 
               <div className="absolute inset-0 px-6 sm:px-12 pb-12 flex flex-col justify-end gap-4 max-w-5xl mx-auto z-30 pointer-events-none">

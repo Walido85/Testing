@@ -8,7 +8,6 @@ import { getStationListeners } from '../lib/radioUtils';
 import { LiveListenerCount } from './LiveListenerCount';
 
 const Player = ReactPlayer as any;
-const HLS_CDN = 'https://cdn.jsdelivr.net/npm/hls.js@latest';
 
 export default function PersistentPlayer() {
   const { t } = useTranslation();
@@ -112,8 +111,7 @@ export default function PersistentPlayer() {
     if (!currentStream || !audioRef.current) return;
     
     const type = getPlayerType(currentStream);
-    const isHttp = currentStream.toLowerCase().startsWith('http://');
-    
+
     // Use a public CORS proxy for all streams to handle CORS and Mixed Content issues in the browser.
     const safeUrl = `https://corsproxy.io/?url=${encodeURIComponent(currentStream)}`;
 

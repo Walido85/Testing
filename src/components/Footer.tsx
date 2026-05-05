@@ -1,13 +1,31 @@
-import { Link, useAstroNavigate } from '../utils/navigation';
+import { Link } from '../utils/navigation';
 import { useTranslation } from 'react-i18next';
-import { Facebook, Twitter, Instagram, Youtube, ChevronRight, TrendingUp } from 'lucide-react';
+import { ChevronRight, TrendingUp } from 'lucide-react';
 
 import { useLanguage } from '../context/LanguageContext';
+
+const socialIcons = [
+  {
+    name: 'Facebook',
+    path: 'M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z',
+  },
+  {
+    name: 'X (Twitter)',
+    path: 'M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z',
+  },
+  {
+    name: 'Instagram',
+    path: 'M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37zM17.5 6.5h.01M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2z',
+  },
+  {
+    name: 'YouTube',
+    path: 'M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.54C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58zM9.75 15.02V8.98L15.5 12l-5.75 3.02z',
+  },
+];
 
 export default function Footer() {
   const { t } = useTranslation();
   const { lang } = useLanguage();
-  const navigate = useAstroNavigate();
 
   const footerSections = [
     {
@@ -69,20 +87,17 @@ export default function Footer() {
               {t('TuniWave is a comprehensive digital media platform dedicated to bringing the best of Tunisia\'s information and entertainment to your fingertips.')}
             </p>
             <div className="flex gap-3">
-              {[
-                { Icon: Facebook, name: "Facebook" },
-                { Icon: Twitter, name: "Twitter" },
-                { Icon: Instagram, name: "Instagram" },
-                { Icon: Youtube, name: "Youtube" },
-              ].map(({ Icon, name }, i) => (
-                <a 
-                  key={i}
-                  href="#" 
-                  className="w-9 h-9 sm:w-10 sm:h-10 border rounded-full flex items-center justify-center hover:bg-[var(--accent-color)] hover:border-[var(--accent-color)] hover:text-white transition-colors" 
+              {socialIcons.map(({ name, path }) => (
+                <a
+                  key={name}
+                  href="#"
+                  className="w-9 h-9 sm:w-10 sm:h-10 border rounded-full flex items-center justify-center hover:bg-[var(--accent-color)] hover:border-[var(--accent-color)] hover:text-white transition-colors"
                   style={{ borderColor: 'var(--border-color)', color: 'var(--text-color)' }}
                   aria-label={name}
                 >
-                  <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5 sm:w-4 sm:h-4">
+                    <path d={path} />
+                  </svg>
                 </a>
               ))}
             </div>

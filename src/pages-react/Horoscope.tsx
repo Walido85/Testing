@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import SEO from '../components/SEO';
-import { Sparkles, Star, Moon, Heart, Briefcase, Zap, X, Info, Coffee, Sun, Compass, LayoutGrid, Sparkle } from 'lucide-react';
+import { Sparkles, Star, Moon, Heart, Briefcase, Zap, X, Info, Compass, LayoutGrid } from 'lucide-react';
 import { useMemo, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -80,7 +80,6 @@ const getDailyHoroscope = (sign: string, date: Date, t: any) => {
 export default function Horoscope() {
   const { t, i18n } = useTranslation();
   const lang = i18n.language || 'en';
-  const isArabic = i18n.language === 'ar';
   const today = new Date();
   const [selectedSign, setSelectedSign] = useState<any>(null);
   const [viewMode, setViewMode] = useState<'daily' | 'weekly'>('daily');

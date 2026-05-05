@@ -45,15 +45,13 @@ const pages: Record<string, React.ComponentType<any>> = {
 export type PageName = keyof typeof pages;
 
 interface Props {
-  pageName: string;
+  pageName?: string;
   url?: string;
   initialData?: any;
   [key: string]: any;
 }
 
-
-
-export default function AstroPageLoader({ pageName, url, initialData, ...rest }: Props) {
+export default function AstroPageLoader({ pageName = 'Home', url, initialData, ...rest }: Props) {
   const PageComponent = (pages as any)[pageName] || pages.Home;
 
   // Manually extract params from URL for components that expect them

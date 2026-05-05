@@ -3,7 +3,7 @@ import { Link } from '../utils/navigation';
 import { useTranslation } from 'react-i18next';
 import SEO from '../components/SEO';
 import { useLanguage } from '../context/LanguageContext';
-import { FileText, Map, TrendingUp, Radio, Tv, Newspaper, Bookmark, Briefcase, Plane, MoonStar, Sparkles } from 'lucide-react';
+import { FileText, Map, TrendingUp, Radio, Tv, Newspaper, Bookmark, Plane, MoonStar, Sparkles } from 'lucide-react';
 
 export default function Sitemap() {
   const { t } = useTranslation();

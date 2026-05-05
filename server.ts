@@ -2,15 +2,13 @@ import express from "express";
 import { createServer as createViteServer } from "vite";
 import path from "path";
 import fs from "fs";
-import { fileURLToPath } from "url";
 import dotenv from "dotenv";
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs, query, where, limit, Timestamp, orderBy } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, query, where, limit, orderBy } from 'firebase/firestore';
 
 dotenv.config();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+
 
 // Initialize Firebase for server-side cache
 const firebaseConfig = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'firebase-applet-config.json'), 'utf8'));
@@ -25,10 +23,7 @@ const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 async function refreshHomeCache() {
   try {
     const timeNow = Date.now();
-    const lookbackDays = 30;
-    const pastDate = timeNow - (lookbackDays * 24 * 60 * 60 * 1000);
-    const pastTimestamp = Timestamp.fromMillis(pastDate);
-    
+
     // 0. Fetch Sources to map language fallback
     const sourcesSnapshot = await getDocs(collection(db, 'rss'));
     const sourceLangMap = new Map();
@@ -123,12 +118,12 @@ async function startServer() {
   app.use(express.json());
 
   // Health Check
-  app.get("/api/health", (req, res) => {
+  app.get("/api/health", (_req, res) => {
     res.json({ status: "ok" });
   });
 
   // Home Cache API Endpoint
-  app.get("/api/home-data", async (req, res) => {
+  app.get("/api/home-data", async (_req, res) => {
     if (!homeDataCache || (Date.now() - lastCacheTime > CACHE_TTL)) {
       await refreshHomeCache();
     }
@@ -142,13 +137,13 @@ async function startServer() {
   });
 
   // Explicit route for robots.txt
-  app.get("/robots.txt", (req, res) => {
+  app.get("/robots.txt", (_req, res) => {
     res.type("text/plain");
     res.send("User-agent: *\nAllow: /\n\nSitemap: https://tuniwave.com/sitemap.xml");
   });
 
   // Explicit route for sitemap.xml
-  app.get("/sitemap.xml", (req, res) => {
+  app.get("/sitemap.xml", (_req, res) => {
     res.type("text/xml");
     const sitemapPath = path.join(process.cwd(), "public", "sitemap.xml");
     if (fs.existsSync(sitemapPath)) {
@@ -159,7 +154,7 @@ async function startServer() {
   });
 
   // Explicit route for ads.txt
-  app.get("/ads.txt", (req, res) => {
+  app.get("/ads.txt", (_req, res) => {
     res.type("text/plain");
     const adsPath = path.join(process.cwd(), "public", "ads.txt");
     if (fs.existsSync(adsPath)) {
@@ -237,7 +232,7 @@ async function startServer() {
       return res.redirect(302, `/${targetLang}`);
     });
 
-    app.get("*", (req, res) => {
+    app.get("*", (_req, res) => {
       res.sendFile(path.join(distPath, "index.html"));
     });
   }

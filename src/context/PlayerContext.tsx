@@ -54,7 +54,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       const savedPlayerState = localStorage.getItem('player_state');
       if (savedPlayerState) {
         setTimeout(() => {
-          const { currentStream, stationInfo, isPlaying } = JSON.parse(savedPlayerState);
+          const { currentStream, stationInfo } = JSON.parse(savedPlayerState);
           if (currentStream && stationInfo) {
             playerGlobalState.set({
               currentStream,

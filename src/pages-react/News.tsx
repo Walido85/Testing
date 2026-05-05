@@ -1,26 +1,12 @@
-import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { collection, query, where, getDocs, limit, orderBy } from 'firebase/firestore';
 import { db } from '../firebase';
-import { getArticleImage } from '../services/newsService';
-import { Newspaper, AlertCircle, Share2, Bookmark, ChevronLeft, ChevronRight, Clock } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-import { Link, useAstroNavigate } from '../utils/navigation';
+import { Link } from '../utils/navigation';
 import { useLanguage } from '../context/LanguageContext';
 import SEO from '../components/SEO';
-import { motion, AnimatePresence } from 'motion/react';
-
-const MotionLink = (motion as any).create ? (motion as any).create(Link) : motion(Link);
-
-interface RssSource {
-  id: string;
-  name: string;
-  genre: string;
-  logo_url: string;
-  status: string;
-  stream_link: string;
-  language?: string;
-}
 
 interface Article {
   id: string;
@@ -37,9 +23,6 @@ interface Article {
   language?: string;
   imageUrl?: string;
 }
-
-const CACHE_KEY = 'news_content_v8';
-const CACHE_DURATION = 30 * 60 * 1000; // 30 minutes
 
 const SkeletonCard = () => (
   <div className="flex items-start gap-4 p-3 rounded-xl border animate-pulse" style={{ background: 'var(--card-bg)', borderColor: 'var(--border-color)' }}>
@@ -110,7 +93,6 @@ function timeAgo(timestamp: any, t: any, isArabic: boolean) {
 export default function News({ initialData, initialGenres }: { initialData?: Article[], initialGenres?: string[] }) {
   const { t, i18n } = useTranslation();
   const { lang } = useLanguage();
-  const navigate = useAstroNavigate();
   const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : new URLSearchParams();
   const urlGenre = searchParams.get('genre');
   const searchQuery = searchParams.get('q');
@@ -160,44 +142,6 @@ export default function News({ initialData, initialGenres }: { initialData?: Art
   };
   const [error, setError] = useState<string | null>(null);
   const [visibleCount, setVisibleCount] = useState(20);
-  const [bookmarks, setBookmarks] = useState<string[]>([]);
-  const [imgErrors, setImgErrors] = useState<Record<string, boolean>>({});
-
-  useEffect(() => {
-    const savedBookmarks = localStorage.getItem('news_bookmarks');
-    if (savedBookmarks) {
-      setBookmarks(JSON.parse(savedBookmarks));
-    }
-  }, []);
-
-  const toggleBookmark = (e: React.MouseEvent, articleId: string) => {
-    e.stopPropagation();
-    e.preventDefault();
-    setBookmarks(prev => {
-      const next = prev.includes(articleId) ? prev.filter(id => id !== articleId) : [...prev, articleId];
-      localStorage.setItem('news_bookmarks', JSON.stringify(next));
-      return next;
-    });
-  };
-
-  const handleShare = async (e: React.MouseEvent, article: Article) => {
-    e.stopPropagation();
-    e.preventDefault();
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: article.title,
-          text: article.description,
-          url: article.link,
-        });
-      } catch (err) {
-        console.log('Error sharing:', err);
-      }
-    } else {
-      navigator.clipboard.writeText(article.link);
-    }
-  };
-
   const fetchNews = useCallback(async () => {
     // Only show loading if we don't already have articles to display
     if (articles.length === 0) {
@@ -317,20 +261,6 @@ export default function News({ initialData, initialGenres }: { initialData?: Art
   }, [articles, activeGenre, searchQuery]);
 
   const displayedArticles = filteredArticles.slice(0, visibleCount);
-
-  // Group articles by AI-identified categories for the professional portal layout
-  const articlesByCategory = useMemo(() => {
-    const grouped: Record<string, Article[]> = {};
-    // We only use articles that have been categorized (the top ones)
-    articles.slice(0, 100).forEach(article => {
-      const cat = article.genre || 'General';
-      if (!grouped[cat]) grouped[cat] = [];
-      if (grouped[cat].length < 8) {
-        grouped[cat].push(article);
-      }
-    });
-    return grouped;
-  }, [articles]);
 
   const getInitials = (name: string) => {
     return name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();

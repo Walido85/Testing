@@ -121,10 +121,10 @@ export default function Header({
     if (exchangeRates.length) marketData.push(...exchangeRates.slice(0, 5));
     
     marketData.forEach((item, idx) => {
-      let name;
-      let val;
-      let changeStr;
-      let isUp;
+      let name: string;
+      let val: string | number;
+      let changeStr: string;
+      let isUp: boolean;
       
       if ('currency' in item) {
         name = item.currency.substring(0, 3);

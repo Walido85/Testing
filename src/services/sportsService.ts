@@ -1,4 +1,4 @@
-import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 
 const FOOTBALL_COLLECTION = 'football';

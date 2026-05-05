@@ -5,13 +5,11 @@ import { getArticleImage } from '../services/newsService';
 import { useTranslation } from 'react-i18next';
 import { useLanguage } from '../context/LanguageContext';
 import SEO from '../components/SEO';
-import { ChevronRight, Play, Plane, Radio, Crown, ChevronLeft, Globe2, TrendingUp, MoonStar, Sun, Sunrise, Sunset, Moon, CloudSun } from 'lucide-react';
+import { ChevronRight, Play, Plane, Radio, Crown, ChevronLeft, Globe2, MoonStar, Sun, Sunrise, Sunset, Moon, CloudSun } from 'lucide-react';
 
 
-import { Link, useAstroNavigate } from '../utils/navigation';
+import { Link } from '../utils/navigation';
 import { getCountryCode } from '../lib/countryUtils';
-import { useMarketData } from '../hooks/useMarketData';
-import { parseSportsDate } from '../services/sportsService';
 import { useGeolocation, usePrayerTimes } from '../hooks/islamic';
 import { useLocation as useAppLocation } from '../context/LocationContext';
 import { LazyLoad } from '../components/LazyLoad';
@@ -638,7 +636,7 @@ export default function Home({ initialData }: { initialData?: { topNews: any[], 
                        </div>
                     </div>
                     <div className="absolute bottom-4 left-4 right-4 z-10 flex justify-between items-end border-t border-white/20 pt-3" dir="ltr">
-                       {weatherData.daily.time.slice(0, 5).map((timeStr, i) => {
+                       {weatherData.daily.time.slice(0, 5).map((timeStr: string, i: number) => {
                           const date = new Date(timeStr);
                           let dayName = date.toLocaleDateString(i18n.language, { weekday: 'short' });
                           if (i === 0) dayName = t('Today');

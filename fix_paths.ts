@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-function fixPaths(dir) {
+function fixPaths(dir: string) {
   const files = fs.readdirSync(dir);
   for (const file of files) {
     if (file.includes('\\')) {

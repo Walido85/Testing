@@ -1,5 +1,5 @@
 import { db } from './src/firebase.js';
-import { collection, getDocs, limit } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 
 async function dump() {
   console.log("Dumping RSS sources...");

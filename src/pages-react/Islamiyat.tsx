@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Compass, Clock, MapPin, Sparkles, CalendarDays, Timer, Map as MapIcon, ChevronRight } from 'lucide-react';
+import { Compass, Clock, MapPin, Map as MapIcon, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLocation as useAppLocation } from '../context/LocationContext';
 import { 
@@ -40,7 +40,7 @@ export default function Islamiyat() {
 
   const PRAYER_KEYS = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'] as const;
 
-  const [currentTime, setCurrentTime] = useState(new Date());
+  const [, setCurrentTime] = useState(new Date());
   useEffect(() => {
     if (!isClient) return;
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);

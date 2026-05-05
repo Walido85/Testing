@@ -1,32 +1,19 @@
 
-import { Link, useAstroNavigate } from '../utils/navigation';
-import { Home, Newspaper, TrendingUp, User, Star, Globe, Sun, Moon, Trophy, Tv, Radio, Activity, X, Plane } from 'lucide-react';
-import { useState, useEffect, useRef, lazy, Suspense } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import BottomNav from './BottomNav';
-import Header from './Header';
-import Footer from './Footer';
-import CookieConsent from './CookieConsent';
+import { useAstroNavigate } from '../utils/navigation';
+import { TrendingUp } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import i18nInstance from '../i18n';
-import { useTheme } from '../context/ThemeContext';
-import { useAuth } from '../context/AuthContext';
 import { useMarketData } from '../hooks/useMarketData';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../firebase';
 import { sportsService } from '../services/sportsService';
 import { fetchNewsFromRss } from '../services/newsService';
 import { useLanguage } from '../context/LanguageContext';
 
 export default function Layout({ children }: { children?: React.ReactNode }) {
   const navigate = useAstroNavigate();
-  const location = typeof window !== 'undefined' ? window.location : { pathname: '', search: '' };
   const { t, i18n } = useTranslation();
-  const { lang, switchLanguage } = useLanguage();
+  const { lang } = useLanguage();
   const [isLangOpen, setIsLangOpen] = useState(false);
   const langRef = useRef<HTMLDivElement>(null);
-  const { isDarkMode, toggleDarkMode } = useTheme();
-  const { user } = useAuth();
   const { tunisiaStocks, globalIndices } = useMarketData();
   const marketData = [...tunisiaStocks, ...globalIndices].slice(0, 15).map(s => ({
     name: s.name,
@@ -36,13 +23,6 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
   }));
   const [trendingNews, setTrendingNews] = useState<string[]>([]);
   const [sportsTicker, setSportsTicker] = useState<string[]>([]);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   useEffect(() => {
     const fetchTickerNews = async () => {
       try {
@@ -92,15 +72,6 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
     fetchSportsTicker();
   }, []);
 
-  const languages = [
-    { code: 'en', label: 'EN', fullLabel: 'English', flag: 'https://flagcdn.com/us.svg' },
-    { code: 'fr', label: 'FR', fullLabel: 'Français', flag: 'https://flagcdn.com/fr.svg' },
-    { code: 'ar', label: 'عر', fullLabel: 'العربية', flag: 'https://flagcdn.com/tn.svg' },
-  ];
-
-  const currentLang = languages.find(l => l.code === i18n.language) || languages[0];
-  const otherLanguages = languages.filter(l => l.code !== i18n.language);
-
   useEffect(() => {
     document.documentElement.lang = i18n.language;
     document.documentElement.dir = i18n.language === 'ar' ? 'rtl' : 'ltr';
@@ -117,41 +88,6 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
     }
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isLangOpen]);
-
-  const changeLanguage = (code: string) => {
-    const currentPath = location.pathname;
-    const pathParts = currentPath.split("/").filter(Boolean);
-    
-    if (pathParts.includes('en') || pathParts.includes('fr') || pathParts.includes('ar')) {
-      pathParts[0] = code;
-    } else {
-      pathParts.unshift(code);
-    }
-
-    // Logic: If we are on a news article page (/:lang/news/:slug)
-    // always redirect to the news list for the new language since individual articles aren't translated.
-    if (pathParts[1] === "news" && pathParts.length > 2) {
-      navigate(`/${code}/news`);
-      setIsLangOpen(false);
-      return;
-    }
-
-    const newPath = "/" + pathParts.join("/") + location.search;
-    navigate(newPath);
-    setIsLangOpen(false);
-  };
-
-  const navItems = [
-    { path: `/${lang}/`, icon: Home, label: t('Home') },
-    { path: `/${lang}/news`, icon: Newspaper, label: t('News') },
-    { path: `/${lang}/finance`, icon: TrendingUp, label: t('Finance') },
-    { path: `/${lang}/sports`, icon: Trophy, label: t('Sports') },
-    { path: `/${lang}/tv`, icon: Tv, label: t('Live TV') },
-    { path: `/${lang}/radio`, icon: Radio, label: t('Radio') },
-    { path: 'https://vols.tuniwave.com', icon: Plane, label: t('Vols'), isExternal: true },
-    { path: `/${lang}/islamiyat`, icon: Moon, label: t('Islamiyat') },
-    { path: `/${lang}/horoscope`, icon: Star, label: t('Horoscope') },
-  ];
 
   const contentPadding = "px-4 sm:px-6 lg:px-8";
 

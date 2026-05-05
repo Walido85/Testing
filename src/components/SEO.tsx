@@ -84,9 +84,8 @@ export default function SEO({
     return url.endsWith('/') && url !== 'https://tuniwave.com/' ? url.slice(0, -1) : url;
   };
 
-  // We compute the true canonical directly from the current location to guarantee it exactly matches
-  // the document URL being crawled, ensuring it never inadvertently points to a different hreflang variant.
-  let resolvedCanonical = `https://tuniwave.com${location.pathname === '/' ? '' : location.pathname}${getCleanSearch()}`;
+  // Use the explicit canonical if provided, otherwise derive it from the current location.
+  let resolvedCanonical = canonical ?? `https://tuniwave.com${location.pathname === '/' ? '' : location.pathname}${getCleanSearch()}`;
   if (resolvedCanonical.endsWith('/') && resolvedCanonical !== 'https://tuniwave.com/') {
     resolvedCanonical = resolvedCanonical.slice(0, -1);
   }

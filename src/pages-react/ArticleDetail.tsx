@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { useAstroNavigate } from '../utils/navigation';
 import { useTranslation } from 'react-i18next';
-import { Newspaper, ChevronLeft, ExternalLink, Clock, Share2, AlertCircle } from 'lucide-react';
-import { motion } from 'motion/react';
+import { ChevronLeft, ExternalLink, Share2, AlertCircle } from 'lucide-react';
 import SEO from '../components/SEO';
 
 interface Article {
@@ -29,7 +28,6 @@ declare global {
 
 import { collection, query, where, getDocs, getDoc, limit, doc } from 'firebase/firestore';
 import { db } from '../firebase';
-import { getArticleImage } from '../services/newsService';
 
 export default function ArticleDetail({ initialData, slug, lang: propLang, articleLang: propArticleLang }: { initialData?: Article, slug?: string, lang?: string, articleLang?: string }) {
   const { t, i18n } = useTranslation();
