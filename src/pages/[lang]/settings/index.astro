@@ -1,6 +1,5 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import AstroPageLoader from '@/components/AstroPageLoader';
 
 export function getStaticPaths() {
   return [
@@ -13,6 +12,4 @@ export function getStaticPaths() {
 const { lang } = Astro.params;
 ---
 
-<Layout title="TuniWave - Settings" lang={lang}>
-  <AstroPageLoader client:only="react" pageName="Settings" url={Astro.url.pathname} />
-</Layout>
+<Layout title="TuniWave - Settings" lang={lang} pageName="Settings" />

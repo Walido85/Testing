@@ -31,23 +31,28 @@ import { db } from '../firebase';
 
 export default function ArticleDetail({ initialData, slug, lang: propLang, articleLang: propArticleLang }: { initialData?: Article, slug?: string, lang?: string, articleLang?: string }) {
   const { t, i18n } = useTranslation();
-  const lang = propLang || i18n.language;
-  const articleLang = propArticleLang || lang;
+  // Prefer the prop passed from Astro — don't depend on i18n state which can change mid-render
+  const lang = propLang || i18n.language || 'ar';
+  const newsLang = propArticleLang || lang;
 
   const navigate = useAstroNavigate();
-  const isArabic = i18n.language === 'ar';
-  
-  // Use articleLang if available, otherwise fallback to lang
-  const newsLang = articleLang || lang;
-  
+  const isArabic = lang === 'ar';
+
+  // URL slugs can be percent-encoded (e.g. Arabic text). Decode once and use everywhere.
+  const decodedSlug = slug ? (() => { try { return decodeURIComponent(slug); } catch { return slug; } })() : '';
+
   // Priority: Prop (SSR) > Global (Legacy) > null
+  // Compare both raw and decoded slug so encoding differences never cause a miss.
   const [article, setArticle] = useState<Article | null>(() => {
-    if (!slug) return null;
-    if (initialData && (initialData.slug === slug || initialData.id === slug)) return initialData;
+    if (!decodedSlug) return null;
+    if (initialData) {
+      const s = initialData.slug, id = initialData.id;
+      if (s === decodedSlug || s === slug || id === decodedSlug || id === slug) return initialData;
+    }
     if (typeof window !== 'undefined' && window.__INITIAL_ARTICLE__) return window.__INITIAL_ARTICLE__;
     return null;
   });
-  const [loading, setLoading] = useState(!article && !!slug);
+  const [loading, setLoading] = useState(!article && !!decodedSlug);
   const [error, setError] = useState<string | null>(null);
   const [textSizeLevel, setTextSizeLevel] = useState(0);
 
@@ -56,93 +61,66 @@ export default function ArticleDetail({ initialData, slug, lang: propLang, artic
   }, [slug]);
 
   useEffect(() => {
-    if (!slug) return;
-    
-    // If slug changed or was not in window, fetch it directly from Firestore
-    const isMatchingSlug = article && (article.slug === slug || article.id === slug);
-    if (!isMatchingSlug) {
-      setLoading(true);
-      setError(null);
-      
-      const fetchArticle = async () => {
-        try {
-          const decodedSlug = slug ? decodeURIComponent(slug) : '';
-          
-          let newsQuery = query(
-            collection(db, 'rss_articles'),
-            where('slug', '==', decodedSlug),
-            where('language', '==', newsLang),
-            limit(1)
-          );
-          
-          let snapshot = await getDocs(newsQuery);
+    if (!decodedSlug) return;
 
-          if (snapshot.empty && slug) {
-            newsQuery = query(
-              collection(db, 'rss_articles'),
-              where('slug', '==', slug),
-              where('language', '==', newsLang),
-              limit(1)
-            );
-            snapshot = await getDocs(newsQuery);
-          }
+    // Check both raw and decoded forms so encoding differences never cause a spurious re-fetch
+    const isMatchingSlug = article && (
+      article.slug === decodedSlug || article.slug === slug ||
+      article.id === decodedSlug || article.id === slug
+    );
+    if (isMatchingSlug) return;
 
-          if (snapshot.empty && decodedSlug) {
-            newsQuery = query(
-              collection(db, 'rss_articles'),
-              where('slug', '==', decodedSlug),
-              limit(1)
-            );
-            snapshot = await getDocs(newsQuery);
-          }
+    setLoading(true);
+    setError(null);
 
-          let docSnapshot = null;
+    const fetchArticle = async () => {
+      try {
+        // Run all lookup strategies in parallel instead of sequential fallbacks
+        const [bySlugLang, bySlugOnly, byIdSnap] = await Promise.all([
+          getDocs(query(collection(db, 'rss_articles'), where('slug', '==', decodedSlug), where('language', '==', newsLang), limit(1))),
+          getDocs(query(collection(db, 'rss_articles'), where('slug', '==', decodedSlug), limit(1))),
+          getDoc(doc(db, 'rss_articles', decodedSlug)),
+        ]);
 
-          if (!snapshot.empty) {
-            docSnapshot = snapshot.docs[0];
-          } else if (slug) {
-            const docRef = doc(db, 'rss_articles', slug);
-            const idSnapshot = await getDoc(docRef);
-            if (idSnapshot.exists()) {
-              docSnapshot = idSnapshot as any;
-            }
-          }
+        const docSnapshot =
+          (!bySlugLang.empty ? bySlugLang.docs[0] : null) ||
+          (!bySlugOnly.empty ? bySlugOnly.docs[0] : null) ||
+          (byIdSnap.exists() ? byIdSnap : null);
 
-          if (!docSnapshot) {
-            throw new Error('Article not found');
-          }
-          const rawData = docSnapshot.data();
-          const data = { 
-            id: docSnapshot.id, 
-            ...rawData,
-            thumbnail: rawData.imageUrl || rawData.thumbnail || null,
-            pubDate: rawData.pubDate 
-              ? (typeof rawData.pubDate === 'number' ? rawData.pubDate : (rawData.pubDate.seconds ? rawData.pubDate.seconds * 1000 : new Date(rawData.pubDate).getTime())) 
-              : 0
-          } as Article;
-          
-          setArticle(data);
-          setLoading(false);
-          delete (window as any).__INITIAL_ARTICLE__;
-        } catch (err: any) {
-          console.error(err);
-          setError(err.message);
-          setLoading(false);
-        }
-      };
+        if (!docSnapshot) throw new Error('Article not found');
 
-      fetchArticle();
-    }
-  }, [slug, newsLang]);
+        const rawData = docSnapshot.data()!;
+        const data = {
+          id: docSnapshot.id,
+          ...rawData,
+          thumbnail: rawData.imageUrl || rawData.thumbnail || null,
+          pubDate: rawData.pubDate
+            ? (typeof rawData.pubDate === 'number' ? rawData.pubDate : (rawData.pubDate.seconds ? rawData.pubDate.seconds * 1000 : new Date(rawData.pubDate).getTime()))
+            : 0,
+        } as Article;
 
-  if (!slug || error || !article) {
-    if (loading) {
-      return (
-        <div className="min-h-screen bg-[var(--bg-color)] flex items-center justify-center">
-          <div className="w-12 h-12 border-4 border-[var(--accent-color)]/20 border-t-[var(--accent-color)] rounded-full animate-spin" />
-        </div>
-      );
-    }
+        setArticle(data);
+        setLoading(false);
+        delete (window as any).__INITIAL_ARTICLE__;
+      } catch (err: any) {
+        console.error(err);
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchArticle();
+  }, [decodedSlug, newsLang]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[var(--bg-color)] flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-[var(--accent-color)]/20 border-t-[var(--accent-color)] rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!decodedSlug || error || !article) {
     return (
       <div className="min-h-screen bg-[var(--bg-color)] flex flex-col items-center justify-center p-6 text-center">
         <AlertCircle className="w-16 h-16 text-[var(--accent-color)] mb-4" />
