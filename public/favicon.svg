@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background Drop -->
+  <rect width="512" height="512" rx="112" fill="#121626" />
+  
+  <!-- "T" Element -->
+  <path d="M 176 160 L 336 160 M 256 160 L 256 320" stroke="#ffffff" stroke-width="48" stroke-linecap="round" stroke-linejoin="round" />
+  
+  <!-- Wave Element intersecting the T -->
+  <path d="M 128 352 Q 192 288, 256 352 T 384 352" fill="transparent" stroke="#fc3c44" stroke-width="40" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

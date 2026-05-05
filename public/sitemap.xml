@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://tuniwave.com/en</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tuniwave.com/en"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://tuniwave.com/fr"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://tuniwave.com/ar"/>
+    <lastmod>2026-05-04T14:56:04.086Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1</priority>
+  </url>
+  <url>
+    <loc>https://tuniwave.com/fr</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tuniwave.com/en"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://tuniwave.com/fr"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://tuniwave.com/ar"/>
+    <lastmod>2026-05-04T14:56:04.086Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1</priority>
+  </url>
+  <url>
+    <loc>https://tuniwave.com/ar</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tuniwave.com/en"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://tuniwave.com/fr"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://tuniwave.com/ar"/>
+    <lastmod>2026-05-04T14:56:04.086Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1</priority>
+  </url>
+  <url>
+    <loc>https://tuniwave.com/en/tv</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tuniwave.com/en/tv"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://tuniwave.com/fr/tv"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://tuniwave.com/ar/tv"/>
+    <lastmod>2026-05-04T14:56:04.086Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://tuniwave.com/fr/tv</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tuniwave.com/en/tv"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://tuniwave.com/fr/tv"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://tuniwave.com/ar/tv"/>
+    <lastmod>2026-05-04T14:56:04.086Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://tuniwave.com/ar/tv</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tuniwave.com/en/tv"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://tuniwave.com/fr/tv"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://tuniwave.com/ar/tv"/>
+    <lastmod>2026-05-04T14:56:04.086Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://tuniwave.com/en/sports</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tuniwave.com/en/sports"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://tuniwave.com/fr/sports"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://tuniwave.com/ar/sports"/>
+    <lastmod>2026-05-04T14:56:04.086Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://tuniwave.com/fr/sports</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tuniwave.com/en/sports"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://tuniwave.com/fr/sports"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://tuniwave.com/ar/sports"/>
+    <lastmod>2026-05-04T14:56:04.086Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://tuniwave.com/ar/sports</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tuniwave.com/en/sports"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://tuniwave.com/fr/sports"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://tuniwave.com/ar/sports"/>
+    <lastmod>2026-05-04T14:56:04.086Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://tuniwave.com/en/rss</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tuniwave.com/en/rss"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://tuniwave.com/fr/rss"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://tuniwave.com/ar/rss"/>
+    <lastmod>2026-05-04T14:56:04.086Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://tuniwave.com/fr/rss</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tuniwave.com/en/rss"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://tuniwave.com/fr/rss"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://tuniwave.com/ar/rss"/>
+    <lastmod>2026-05-04T14:56:04.086Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://tuniwave.com/ar/rss</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tuniwave.com/en/rss"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://tuniwave.com/fr/rss"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://tuniwave.com/ar/rss"/>
+    <lastmod>2026-05-04T14:56:04.086Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://tuniwave.com/en/finance</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tuniwave.com/en/finance"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://tuniwave.com/fr/finance"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://tuniwave.com/ar/finance"/>
+    <lastmod>2026-05-04T14:56:04.086Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://tuniwave.com/fr/finance</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tuniwave.com/en/finance"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://tuniwave.com/fr/finance"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://tuniwave.com/ar/finance"/>
+    <lastmod>2026-05-04T14:56:04.086Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://tuniwave.com/ar/finance</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tuniwave.com/en/finance"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://tuniwave.com/fr/finance"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://tuniwave.com/ar/finance"/>
+    <lastmod>2026-05-04T14:56:04.086Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://tuniwave.com/en/about</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tuniwave.com/en/about"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://tuniwave.com/fr/about"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://tuniwave.com/ar/about"/>
+    <lastmod>2026-05-04T14:56:04.086Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://tuniwave.com/fr/about</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tuniwave.com/en/about"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://tuniwave.com/fr/about"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://tuniwave.com/ar/about"/>
+    <lastmod>2026-05-04T14:56:04.086Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://tuniwave.com/ar/about</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tuniwave.com/en/about"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://tuniwave.com/fr/about"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://tuniwave.com/ar/about"/>
+    <lastmod>2026-05-04T14:56:04.086Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://tuniwave.com/en/contact</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tuniwave.com/en/contact"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://tuniwave.com/fr/contact"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://tuniwave.com/ar/contact"/>
+    <lastmod>2026-05-04T14:56:04.086Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://tuniwave.com/fr/contact</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tuniwave.com/en/contact"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://tuniwave.com/fr/contact"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://tuniwave.com/ar/contact"/>
+    <lastmod>2026-05-04T14:56:04.086Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://tuniwave.com/ar/contact</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tuniwave.com/en/contact"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://tuniwave.com/fr/contact"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://tuniwave.com/ar/contact"/>
+    <lastmod>2026-05-04T14:56:04.086Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://tuniwave.com/en/privacy</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tuniwave.com/en/privacy"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://tuniwave.com/fr/privacy"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://tuniwave.com/ar/privacy"/>
+    <lastmod>2026-05-04T14:56:04.086Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://tuniwave.com/fr/privacy</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tuniwave.com/en/privacy"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://tuniwave.com/fr/privacy"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://tuniwave.com/ar/privacy"/>
+    <lastmod>2026-05-04T14:56:04.086Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://tuniwave.com/ar/privacy</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tuniwave.com/en/privacy"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://tuniwave.com/fr/privacy"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://tuniwave.com/ar/privacy"/>
+    <lastmod>2026-05-04T14:56:04.086Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://tuniwave.com/en/terms</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tuniwave.com/en/terms"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://tuniwave.com/fr/terms"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://tuniwave.com/ar/terms"/>
+    <lastmod>2026-05-04T14:56:04.086Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://tuniwave.com/fr/terms</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tuniwave.com/en/terms"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://tuniwave.com/fr/terms"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://tuniwave.com/ar/terms"/>
+    <lastmod>2026-05-04T14:56:04.086Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://tuniwave.com/ar/terms</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://tuniwave.com/en/terms"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://tuniwave.com/fr/terms"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://tuniwave.com/ar/terms"/>
+    <lastmod>2026-05-04T14:56:04.086Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+</urlset>

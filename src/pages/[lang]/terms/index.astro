@@ -1,0 +1,18 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import AstroPageLoader from '@/components/AstroPageLoader';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'fr' } },
+    { params: { lang: 'ar' } },
+  ];
+}
+
+const { lang } = Astro.params;
+---
+
+<Layout title="TuniWave - Terms of Service" lang={lang}>
+  <AstroPageLoader client:only="react" pageName="TermsOfService" url={Astro.url.pathname} />
+</Layout>

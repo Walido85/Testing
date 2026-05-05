@@ -1,0 +1,74 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import AstroPageLoader from '@/components/AstroPageLoader';
+import { db } from '@/firebase';
+import { collection, query, where, getDocs, limit, orderBy } from 'firebase/firestore';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'fr' } },
+    { params: { lang: 'ar' } },
+  ];
+}
+
+  const { lang } = Astro.params;
+  
+  // Fetch news list and genres at build time for instant loading
+  let newsData = [];
+  let newsGenres = ['All'];
+  try {
+    // 1. Get active sources for this language
+    const sourcesQuery = query(collection(db, 'rss'), where('status', '==', 'active'));
+    const sourcesSnapshot = await getDocs(sourcesQuery);
+    
+    const langGenresSet = new Set<string>(['All']);
+    const langSources = sourcesSnapshot.docs
+      .map(doc => {
+        const data = doc.data();
+        return { 
+          id: doc.id, 
+          language: (data.language || data.Language || 'ar').toLowerCase(),
+          genre: data.genre || 'General'
+        };
+      })
+      .filter(s => {
+        const isMatch = (lang === 'ar' && (s.language.startsWith('ar') || s.language.includes('arabic'))) ||
+                        (lang === 'en' && (s.language.startsWith('en') || s.language.includes('english'))) ||
+                        (lang === 'fr' && (s.language.startsWith('fr') || s.language.includes('french'))) ||
+                        s.language.startsWith(lang);
+        
+        if (isMatch) {
+          langGenresSet.add(s.genre);
+          return true;
+        }
+        return false;
+      })
+      .map(s => s.id);
+  
+    newsGenres = Array.from(langGenresSet);
+  
+    if (langSources.length > 0) {
+      // 2. Fetch latest articles from these sources
+      const q = query(
+        collection(db, 'rss_articles'),
+        where('sourceId', 'in', langSources.slice(0, 30)),
+        orderBy('pubDate', 'desc'),
+        limit(60)
+      );
+      const snapshot = await getDocs(q);
+      newsData = snapshot.docs.map(doc => {
+        const d = doc.data();
+        return { 
+          id: doc.id, 
+          ...d,
+          thumbnail: d.imageUrl || d.thumbnail || null
+        };
+      });
+    }
+  } catch (e) {
+    console.error("News Index SSR Error:", e);
+  }
+  ---
+  
+  <Layout title="TuniWave - News" lang={lang} pageName="News" initialData={newsData} initialGenres={newsGenres} />

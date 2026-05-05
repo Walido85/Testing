@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+    <meta name="theme-color" content="#fc3c44" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="description" content="TuniWave - Your portal for Tunisian Radio, TV, News and Sports in real-time." />
+    <meta name="keywords" content="Tunisia, Radio, TV, News, Sports, TuniWave, Live, Football" />
+    <meta name="author" content="TuniWave" />
+    <meta name="robots" content="index, follow" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- DNS prefetch for all external domains -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+    <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com">
+    <link rel="dns-prefetch" href="https://firestore.googleapis.com">
+    <link rel="dns-prefetch" href="https://identitytoolkit.googleapis.com">
+    <link rel="dns-prefetch" href="https://www.google-analytics.com">
+
+    <!-- Language redirect (must stay synchronous) -->
+    <script>
+      (function() {
+        if (window.location.pathname === '/') {
+          var savedLang = localStorage.getItem('i18nextLng');
+          var matches = document.cookie.match(/i18nextLng=(ar|fr|en)/);
+          if (!savedLang && matches && matches[1]) {
+            savedLang = matches[1];
+          }
+          var navLang = (navigator.language || '').split('-')[0];
+          var target = savedLang && ['ar', 'fr', 'en'].includes(savedLang) ? savedLang : 
+                       (['ar', 'fr', 'en'].includes(navLang) ? navLang : 'ar');
+          window.location.replace('/' + target + window.location.search + window.location.hash);
+        }
+      })();
+    </script>
+
+    <!-- Fonts: preconnect then load non-blocking -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&amp;display=swap" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet" />
+    </noscript>
+
+    <!-- Deferred Scripts: GA and AdSense loaded on interaction or fallback timeout to optimize TBT -->
+    <meta name="google-adsense-account" content="ca-pub-5565782072443281">
+    <script>
+      (function() {
+        var scriptsLoaded = false;
+        function loadDeferredScripts() {
+          if (scriptsLoaded) return;
+          scriptsLoaded = true;
+          
+          // Google Analytics
+          setTimeout(function() {
+            var gtagScript = document.createElement('script');
+            gtagScript.src = "https://www.googletagmanager.com/gtag/js?id=G-732S890757";
+            gtagScript.async = true;
+            document.head.appendChild(gtagScript);
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-732S890757', { send_page_view: true });
+          }, 10);
+
+          // AdSense
+          setTimeout(function() {
+            var script = document.createElement('script');
+            script.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5565782072443281";
+            script.crossOrigin = "anonymous";
+            script.async = true;
+            document.head.appendChild(script);
+          }, 100);
+
+          events.forEach(function(e) { window.removeEventListener(e, loadDeferredScripts); });
+        }
+
+        var events = ['scroll', 'mousemove', 'touchstart', 'click', 'keydown'];
+        events.forEach(function(e) { window.addEventListener(e, loadDeferredScripts, {once: true, passive: true}); });
+        
+        window.addEventListener('load', function() {
+          setTimeout(loadDeferredScripts, 8000);
+        });
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

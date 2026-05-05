@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "tunisia-radios-d7aa8"
+  },
+  "targets": {
+    "tunisia-radios-d7aa8": {
+      "hosting": {
+        "main-site": [
+          "tuniwave"
+        ]
+      }
+    }
+  }
+}

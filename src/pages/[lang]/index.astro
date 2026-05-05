@@ -1,0 +1,65 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import AstroPageLoader from '@/components/AstroPageLoader';
+
+import { db } from '@/firebase';
+import { collection, query, where, orderBy, limit, getDocs } from 'firebase/firestore';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'fr' } },
+    { params: { lang: 'ar' } },
+  ];
+}
+
+const { lang } = Astro.params;
+
+// Fetch data at build time for instant loading
+let initialData = { topNews: [], tvChannels: [] };
+try {
+  // 1. Get active news sources for this language
+  const sourcesQuery = query(collection(db, 'rss'), where('status', '==', 'active'));
+  const sourcesSnapshot = await getDocs(sourcesQuery);
+  const langSources = sourcesSnapshot.docs
+    .map(doc => {
+      const d = doc.data();
+      const sLang = (d.language || d.Language || d.langues || d.lang || 'ar').toLowerCase();
+      return { id: doc.id, language: sLang };
+    })
+    .filter(s => {
+      return (lang === 'ar' && (s.language.startsWith('ar') || s.language.includes('arabic'))) ||
+             (lang === 'en' && (s.language.startsWith('en') || s.language.includes('english'))) ||
+             (lang === 'fr' && (s.language.startsWith('fr') || s.language.includes('french'))) ||
+             s.language.startsWith(lang);
+    })
+    .map(s => s.id);
+
+  if (langSources.length > 0) {
+    const q = query(
+      collection(db, 'rss_articles'),
+      where('sourceId', 'in', langSources.slice(0, 30)),
+      orderBy('pubDate', 'desc'),
+      limit(20)
+    );
+    const snapshot = await getDocs(q);
+    initialData.topNews = snapshot.docs.map(doc => {
+      const d = doc.data();
+      return { 
+        id: doc.id, 
+        ...d,
+        thumbnail: d.imageUrl || d.thumbnail || null
+      };
+    });
+  }
+  // 2. Get active TV channels
+  const tvQuery = query(collection(db, 'tv'), where('status', '==', 'active'), limit(10));
+  const tvSnapshot = await getDocs(tvQuery);
+  initialData.tvChannels = tvSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+} catch (e) {
+  console.error("Home Build Error:", e);
+}
+---
+
+<Layout title="TuniWave - Home" lang={lang} pageName="Home" initialData={initialData} />

@@ -1,0 +1,36 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global Safety Net
+    match /{document=**} { 
+      allow read, write: if false; 
+    }
+
+    // Public Read-Only Media Collections
+    match /stations/{stationId} {
+      allow read: if true;
+    }
+
+    match /rss/{rssId} {
+      allow read: if true;
+    }
+
+    match /rss_articles/{articleId} {
+      allow read: if true;
+    }
+
+    match /tv/{tvId} {
+      allow read: if true;
+    }
+
+    match /football/{footballId} {
+      allow read: if true;
+    }
+
+    match /finance/{financeId} {
+      allow read: if true;
+    }
+  }
+}

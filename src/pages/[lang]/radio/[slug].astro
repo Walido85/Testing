@@ -1,0 +1,45 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import AstroPageLoader from '@/components/AstroPageLoader';
+import { db } from '@/firebase';
+import { collection, query, where, getDocs, limit } from 'firebase/firestore';
+
+export async function getStaticPaths() {
+  const q = query(
+    collection(db, 'stations'),
+    where('status', '==', 'active'),
+    limit(200)
+  );
+  const snapshot = await getDocs(q);
+  const stations = snapshot.docs.map(doc => ({ 
+    id: doc.id, 
+    slug: doc.data().slug || doc.id 
+  }));
+
+  const paths = [];
+  for (const lang of ['en', 'fr', 'ar']) {
+    for (const station of stations) {
+      paths.push({ params: { lang, slug: station.slug } });
+    }
+    // Always include 'live' as a default fallback slug
+    paths.push({ params: { lang, slug: 'live' } });
+  }
+  return paths;
+}
+
+const { lang, slug } = Astro.params;
+
+// Fetch station data at build time for instant loading
+let stationData = null;
+try {
+  const q = query(collection(db, "stations"), where("slug", "==", slug));
+  const snapshot = await getDocs(q);
+  if (!snapshot.empty) {
+    stationData = { id: snapshot.docs[0].id, ...snapshot.docs[0].data() };
+  }
+} catch (e) {
+  console.error("Radio Detail Build Error:", e);
+}
+---
+
+<Layout title="TuniWave - Radio Station" lang={lang} pageName="RadioDetail" initialData={stationData} />
