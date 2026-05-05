@@ -93,7 +93,7 @@ function timeAgo(timestamp: any, t: any, isArabic: boolean) {
 export default function News({ initialData, initialGenres }: { initialData?: Article[], initialGenres?: string[] }) {
   const { t, i18n } = useTranslation();
   const { lang } = useLanguage();
-  const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : new URLSearchParams();
+  const searchParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
   const urlGenre = searchParams.get('genre');
   const searchQuery = searchParams.get('q');
 

@@ -17,33 +17,27 @@ export default function ReactProviders({ children, url, lang }: Props) {
   // Normalize URL to avoid trailing slash mismatches during hydration
   const normalize = (path: string) => path === '/' ? path : path.replace(/\/$/, '');
   
-  // Prefer the `url` prop (authoritative, set by Astro at render time).
-  // Only fall back to window.location when no prop is provided (e.g. StandalonePlayer).
-  const initialUrl = url 
-    ? normalize(url) 
-    : (typeof window !== 'undefined' ? normalize(window.location.pathname) + window.location.search : '/');
+  // Use url prop (set by Astro) as the authoritative source.
+  // Always use a consistent value for SSR/hydration — never read window during render.
+  const initialUrl = url ? normalize(url) : '/';
 
-  // Determine initial language from URL synchronously
-  // This prevents hydration mismatches where the server renders one language
-  // and the client renders another before the useEffect fires.
   const getLangFromUrl = (urlStr: string) => {
     if (!urlStr) return null;
     const parts = urlStr.split('/').filter(Boolean);
-    const lang = parts[0];
-    return ['en', 'fr', 'ar'].includes(lang) ? lang : null;
+    const l = parts[0];
+    return ['en', 'fr', 'ar'].includes(l) ? l : null;
   };
 
-  const urlLang = lang || getLangFromUrl(initialUrl);
-  if (urlLang && i18n.language !== urlLang) {
+  const urlLang = lang || getLangFromUrl(initialUrl) || 'ar';
+  if (i18n.language !== urlLang) {
     i18n.changeLanguage(urlLang);
   }
 
-  // Still keep useEffect in case of client-side routing changes without unmounting ReactProviders
   React.useEffect(() => {
-    if (urlLang && i18n.language !== urlLang) {
+    if (i18n.language !== urlLang) {
       i18n.changeLanguage(urlLang);
     }
-  }, [urlLang, i18n.language]);
+  }, [urlLang]);
 
   return (
     <HelmetProvider>

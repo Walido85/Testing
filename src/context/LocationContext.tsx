@@ -186,10 +186,12 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   );
 };
 
-export const useLocation = () => {
-  const context = useContext(LocationContext);
-  if (context === undefined) {
-    throw new Error('useLocation must be used within a LocationProvider');
-  }
-  return context;
+const LOCATION_DEFAULTS: LocationContextType = {
+  location: DEFAULT_LOCATION,
+  updateLocation: () => {},
+  searchLocationByCity: async () => false,
+  loading: false,
+  detectLocation: async () => {},
 };
+
+export const useLocation = () => useContext(LocationContext) ?? LOCATION_DEFAULTS;

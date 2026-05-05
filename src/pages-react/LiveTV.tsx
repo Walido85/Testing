@@ -276,7 +276,7 @@ export default function LiveTV() {
   const lang = i18n.language || "en";
   const isArabic = i18n.language === "ar";
   const { closePlayer } = usePlayer();
-  const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : new URLSearchParams();
+  const searchParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
   const setSearchParams = (params: URLSearchParams) => {
     const newUrl = window.location.pathname + '?' + params.toString();
     window.history.replaceState(null, '', newUrl);

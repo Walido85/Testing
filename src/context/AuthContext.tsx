@@ -85,10 +85,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
+const AUTH_DEFAULTS: AuthContextType = {
+  user: null,
+  loading: false,
+  loginWithGoogle: async () => {},
+  loginWithFacebook: async () => {},
+  loginWithApple: async () => {},
+  logout: async () => {},
+};
+
 export function useAuth() {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
+  return useContext(AuthContext) ?? AUTH_DEFAULTS;
 }

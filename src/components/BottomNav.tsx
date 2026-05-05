@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useLanguage } from '../context/LanguageContext';
 
 export default function BottomNav({ location: propLocation }: { location?: { pathname: string, search?: string } }) {
-  const location = propLocation || { pathname: typeof window !== 'undefined' ? window.location.pathname : '' };
+  const location = propLocation || { pathname: '' };
   const { t } = useTranslation();
   const { lang } = useLanguage();
 

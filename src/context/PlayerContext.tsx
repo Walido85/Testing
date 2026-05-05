@@ -181,10 +181,26 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
   );
 }
 
+const PLAYER_DEFAULTS: PlayerContextType = {
+  currentStream: null,
+  stationInfo: null,
+  isPlaying: false,
+  isExpanded: false,
+  favorites: [],
+  recentlyPlayed: [],
+  sleepTimer: null,
+  accentColor: '#ff4e00',
+  volume: 1,
+  playRadio: () => {},
+  togglePlay: () => {},
+  toggleExpand: () => {},
+  closePlayer: () => {},
+  toggleFavorite: () => {},
+  setSleepTimer: () => {},
+  setAccentColor: () => {},
+  setVolume: () => {},
+};
+
 export function usePlayer() {
-  const context = useContext(PlayerContext);
-  if (context === undefined) {
-    throw new Error('usePlayer must be used within a PlayerProvider');
-  }
-  return context;
+  return useContext(PlayerContext) ?? PLAYER_DEFAULTS;
 }

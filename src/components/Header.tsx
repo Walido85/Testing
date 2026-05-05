@@ -35,7 +35,6 @@ export default function Header({
   onMenuToggle,
 }: HeaderProps) {
   const navigate = useAstroNavigate();
-  const location = typeof window !== 'undefined' ? window.location : { pathname: '', search: '' };
   const { t, i18n } = useTranslation();
   const { lang } = useLanguage();
   const isArabic = i18n.language === "ar";
@@ -66,7 +65,7 @@ export default function Header({
         try {
           const d = parseSportsDate(raw);
           if (d && !isNaN(d.getTime())) {
-            const timeZone = (typeof window !== 'undefined' && Intl.DateTimeFormat().resolvedOptions().timeZone) || 'Africa/Tunis';
+            const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Africa/Tunis';
             return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false, timeZone });
           }
         } catch (e) {}
@@ -172,7 +171,7 @@ export default function Header({
     languages.find((l) => l.code === i18n.language) || languages[0];
 
   const changeLanguage = (code: string) => {
-    const currentPath = location.pathname;
+    const currentPath = window.location.pathname;
     const pathParts = currentPath.split("/").filter(Boolean);
     const supportedLangs = ["en", "fr", "ar"];
 
@@ -190,7 +189,7 @@ export default function Header({
       return;
     }
 
-    const newPath = "/" + pathParts.join("/") + location.search;
+    const newPath = "/" + pathParts.join("/") + window.location.search;
     navigate(newPath);
     setIsLangOpen(false);
   };

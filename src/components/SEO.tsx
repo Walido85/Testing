@@ -38,7 +38,9 @@ export default function SEO({
   preloadImage
 }: SEOProps) {
   const { i18n } = useTranslation();
-  const location = typeof window !== 'undefined' ? window.location : { pathname: '', search: '', hash: '' };
+  const location = typeof window !== 'undefined'
+    ? window.location
+    : { pathname: canonical ? new URL(canonical).pathname : '/', search: '', hash: '' };
   const siteTitle = title.includes("TuniWave") ? title : `${title} | TuniWave`;
   const lang = i18n.language || 'en';
   const fullImage = image.startsWith('http') ? image : `https://tuniwave.com${image}`;

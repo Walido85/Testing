@@ -13,39 +13,30 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode; initialLang?: Language }> = ({ children, initialLang }) => {
-  const location = typeof window !== 'undefined' ? window.location : { pathname: '' };
   const navigate = useAstroNavigate();
   const { i18n } = useTranslation();
   const [mounted, setMounted] = useState(false);
 
-  const [lang, setLang] = useState<Language>(() => {
-    if (initialLang) return initialLang;
-    if (typeof window === 'undefined') return 'ar';
-    const parts = location.pathname.split('/');
-    const p1 = parts[1];
-    if (p1 === 'ar' || p1 === 'fr' || p1 === 'en') return p1 as Language;
-    return 'ar';
-  });
+  // Always start with a consistent value — never read window during render.
+  const [lang, setLang] = useState<Language>(initialLang || 'ar');
 
   useEffect(() => {
     setMounted(true);
-    if (initialLang && lang !== initialLang) {
-      setLang(initialLang);
-      if (i18n.language !== initialLang) {
-        i18n.changeLanguage(initialLang);
-      }
-      document.documentElement.lang = initialLang;
-      document.documentElement.dir = initialLang === 'ar' ? 'rtl' : 'ltr';
-    }
-  }, [initialLang, i18n]);
+    const activeLang = initialLang || lang;
+    if (lang !== activeLang) setLang(activeLang);
+    if (i18n.language !== activeLang) i18n.changeLanguage(activeLang);
+    document.documentElement.lang = activeLang;
+    document.documentElement.dir = activeLang === 'ar' ? 'rtl' : 'ltr';
+  }, [initialLang]);
 
   const switchLanguage = (newLang: Language) => {
-    const pathParts = location.pathname.split('/');
+    const pathname = window.location.pathname;
+    const pathParts = pathname.split('/');
     if (['ar', 'fr', 'en'].includes(pathParts[1])) {
       pathParts[1] = newLang;
       navigate(pathParts.join('/'));
     } else {
-      navigate(`/${newLang}${location.pathname}`);
+      navigate(`/${newLang}${pathname}`);
     }
   };
 
