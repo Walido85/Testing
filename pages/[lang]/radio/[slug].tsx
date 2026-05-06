@@ -4,6 +4,15 @@ import RadioDetail from '../../../src/pages-react/RadioDetail';
 import { collection, query, where, getDocs, limit } from 'firebase/firestore';
 import { db } from '../../../src/firebase';
 
+function serialize(obj: any): any {
+  if (obj === null || obj === undefined) return null;
+  if (typeof obj.toMillis === 'function') return obj.toMillis();
+  if (typeof obj.seconds === 'number' && typeof obj.nanoseconds === 'number') return obj.seconds * 1000;
+  if (Array.isArray(obj)) return obj.map(serialize);
+  if (typeof obj === 'object') return Object.fromEntries(Object.entries(obj).map(([k, v]) => [k, serialize(v)]));
+  return obj;
+}
+
 export default function RadioDetailPage({ lang, slug, initialData }: { lang: string; slug: string; initialData?: any }) {
   const router = useRouter();
   const resolvedSlug = (router.query.slug as string) || slug;
@@ -23,8 +32,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {
     const snap = await getDocs(query(collection(db, 'stations'), where('slug', '==', slug), limit(1)));
     if (!snap.empty) {
-      const d = snap.docs[0];
-      initialData = { id: d.id, ...d.data() };
+      initialData = serialize({ id: snap.docs[0].id, ...snap.docs[0].data() });
     }
   } catch {
     // fall through — client will fetch
@@ -32,6 +40,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   return {
     props: { lang, slug, initialData },
-    revalidate: 86400, // stations change rarely, regenerate once a day
+    revalidate: 86400,
   };
 };

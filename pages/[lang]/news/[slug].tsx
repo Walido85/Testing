@@ -4,6 +4,16 @@ import ArticleDetail from '../../../src/pages-react/ArticleDetail';
 import { collection, query, where, getDocs, getDoc, doc, limit } from 'firebase/firestore';
 import { db } from '../../../src/firebase';
 
+// Recursively convert all Firestore Timestamps and non-serializable values to plain JSON
+function serialize(obj: any): any {
+  if (obj === null || obj === undefined) return null;
+  if (typeof obj.toMillis === 'function') return obj.toMillis();
+  if (typeof obj.seconds === 'number' && typeof obj.nanoseconds === 'number') return obj.seconds * 1000;
+  if (Array.isArray(obj)) return obj.map(serialize);
+  if (typeof obj === 'object') return Object.fromEntries(Object.entries(obj).map(([k, v]) => [k, serialize(v)]));
+  return obj;
+}
+
 export default function ArticlePage({ lang, slug, initialData }: { lang: string; slug: string; initialData?: any }) {
   const router = useRouter();
   const resolvedSlug = (router.query.slug as string) || slug;
@@ -33,15 +43,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       (byId.exists() ? byId : null);
 
     if (snap) {
-      const raw = snap.data()!;
-      initialData = {
-        id: snap.id,
-        ...raw,
-        thumbnail: raw.imageUrl || raw.thumbnail || null,
-        pubDate: raw.pubDate
-          ? (typeof raw.pubDate === 'number' ? raw.pubDate : (raw.pubDate.seconds ? raw.pubDate.seconds * 1000 : new Date(raw.pubDate).getTime()))
-          : 0,
-      };
+      initialData = serialize({ id: snap.id, ...snap.data() });
     }
   } catch {
     // fall through — client will fetch
