@@ -395,7 +395,7 @@ export default function Header({
 
           <button
             onClick={() => {
-              onMenuToggle();
+              onMenuToggle?.();
             }}
             className="transition-colors hover:text-[var(--accent-color)] p-1"
             style={{ color: "var(--text-color)" }}

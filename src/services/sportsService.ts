@@ -59,30 +59,71 @@ async function apiFetch(url: string, cacheKey: string) {
     return data;
 }
 
+async function firestoreLeagues() {
+    const LEAGUES = [
+        'Tunisia Ligue 1', 'Tunisia Cup', 'Premier League',
+        'Serie A', 'Ligue 1', 'Bundesliga',
+        'UEFA Champions League', 'CAF Champions League', 'La Liga',
+    ];
+    const promises = LEAGUES.flatMap(league =>
+        ['_fixtures', '_results', '_standings'].map(t => getDoc(doc(db, 'football', `${league}${t}`)))
+    );
+    const snaps = await Promise.all(promises);
+    const map = new Map<string, string>();
+    snaps.forEach(s => {
+        if (!s.exists()) return;
+        const d = s.data();
+        const name = s.id.replace(/_(fixtures|results|standings)$/, '');
+        const logo = d.league_logo || d.matches?.[0]?.league_logo || '';
+        if (!map.has(name) || (!map.get(name) && logo)) map.set(name, logo);
+    });
+    return Array.from(map.entries()).map(([name, logo]) => ({ name, logo })).sort((a, b) => a.name.localeCompare(b.name));
+}
+
 export const sportsService = {
   getTeamLogo(teamName: string) {
     return teamLogoCache.get(teamName);
   },
 
   getLeagues: async () => {
-    const data = await apiFetch('/api/sports/leagues', 'leagues_list');
-    return data;
+    try {
+      return await apiFetch('/api/sports/leagues', 'leagues_list');
+    } catch {
+      const data = await firestoreLeagues();
+      setClientCache('leagues_list', data);
+      return data;
+    }
   },
 
   getMatches: async (league: string, type: 'fixtures' | 'results' | 'standings') => {
     const key = `${league}_${type}`;
-    const data = await apiFetch(
-      `/api/sports/matches?league=${encodeURIComponent(league)}&type=${type}`,
-      key
-    );
-    cacheTeamLogos(data);
-    return data;
+    try {
+      const data = await apiFetch(`/api/sports/matches?league=${encodeURIComponent(league)}&type=${type}`, key);
+      cacheTeamLogos(data);
+      return data;
+    } catch {
+      const snap = await getDoc(doc(db, 'football', key));
+      const data = snap.exists() ? snap.data() : { matches: [], table: [] };
+      cacheTeamLogos(data);
+      setClientCache(key, data);
+      return data;
+    }
   },
 
   getLiveMatches: async () => {
-    const data = await apiFetch('/api/sports/live', 'live');
-    cacheTeamLogos(data);
-    return data;
+    try {
+      const data = await apiFetch('/api/sports/live', 'live');
+      cacheTeamLogos(data);
+      return data;
+    } catch {
+      const snap = await getDoc(doc(db, 'football', 'live'));
+      let data = snap.exists() ? snap.data() : { matches: [] };
+      if (data.matches && !Array.isArray(data.matches)) data = { ...data, matches: Object.values(data.matches) };
+      const result = { ...data, matches: data.matches || [], status: 'success' };
+      cacheTeamLogos(result);
+      setClientCache('live', result);
+      return result;
+    }
   },
 
   getHistory: async (category: string, date: string) => {
