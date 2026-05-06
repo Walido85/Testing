@@ -1,47 +1,24 @@
 import React from 'react';
+import NextLink from 'next/link';
+import { useRouter } from 'next/router';
 
-export const Link = ({ to, children, ...props }: any) => {
-  const normalize = (path: string) => {
-    if (!path.startsWith('/') || path.includes('://')) return path;
-    const [base, ...rest] = path.split(/([?#])/);
-    const normalizedBase = base.endsWith('/') ? base : `${base}/`;
-    return normalizedBase + rest.join('');
-  };
-    
-  const href = typeof to === 'string' ? normalize(to) : to;
-    
+export const Link = ({ to, children, onClick, className, style, ...props }: any) => {
+  const href = to || '/';
   return (
-    <a href={href} {...props}>
+    <NextLink href={href} onClick={onClick} className={className} style={style} {...props}>
       {children}
-    </a>
+    </NextLink>
   );
 };
 
 export const useAstroNavigate = () => {
+  const router = useRouter();
   return (to: string | number) => {
     if (typeof to === 'number') {
-      window.history.go(to);
+      if (to === -1) router.back();
+      else window.history.go(to);
     } else {
-      const normalize = (path: string) => {
-        if (!path.startsWith('/') || path.includes('://')) return path;
-        const [base, ...rest] = path.split(/([?#])/);
-        const normalizedBase = base.endsWith('/') ? base : `${base}/`;
-        return normalizedBase + rest.join('');
-      };
-      const target = normalize(to);
-
-      // Astro View Transitions intercepts <a> clicks — dispatch a real anchor click
-      // so the router picks it up and does a smooth transition instead of a hard reload.
-      const a = document.createElement('a');
-      a.href = target;
-      a.style.display = 'none';
-      if (document.body) {
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-      } else {
-        window.location.href = target;
-      }
+      router.push(to);
     }
   };
 };

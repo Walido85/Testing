@@ -1,4 +1,4 @@
-import { Helmet } from 'react-helmet-async';
+import Head from 'next/head';
 import { useTranslation } from 'react-i18next';
 
 interface SEOProps {
@@ -164,7 +164,7 @@ export default function SEO({
   } : null;
 
   return (
-    <Helmet>
+    <Head>
       {/* Basic Meta Tags */}
       <html lang={lang} />
       <title>{siteTitle}</title>
@@ -210,6 +210,6 @@ export default function SEO({
           {JSON.stringify(breadcrumbData)}
         </script>
       )}
-    </Helmet>
+    </Head>
   );
 }

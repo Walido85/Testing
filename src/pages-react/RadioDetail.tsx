@@ -29,9 +29,6 @@ export default function RadioDetail({ initialData, slug }: { initialData?: Stati
   const langPrefix = i18n.language.slice(0, 2).toLowerCase();
   
   const [station, setStation] = useState<Station | null>(initialData || null);
-
-  // Guard against missing slug
-  if (!slug) return null;
   const [loading, setLoading] = useState(!initialData);
   const [error, setError] = useState<string | null>(null);
   const [discoverStations, setDiscoverStations] = useState<Station[]>([]);
@@ -39,6 +36,7 @@ export default function RadioDetail({ initialData, slug }: { initialData?: Stati
   const autoplayedStationIdRef = useRef<string | null>(null);
 
   useEffect(() => {
+    if (!slug) return;
     const fetchStation = async () => {
       setLoading(true);
       try {
@@ -120,6 +118,7 @@ export default function RadioDetail({ initialData, slug }: { initialData?: Stati
      fetchNews();
   }, [langPrefix, slug]);
 
+  if (!slug) return null;
   if (loading) return <div className="flex items-center justify-center min-h-[60vh]"><Loader2 className="w-12 h-12 text-[var(--accent-color)] animate-spin" /></div>;
   if (error || !station) return <div className="p-8 text-center text-[var(--text-color)]">{error}</div>;
 

@@ -110,6 +110,8 @@ export default function News({ initialData, initialGenres }: { initialData?: Art
   });
   const [activeGenre, setActiveGenre] = useState<string>(urlGenre || 'All');
   const [loading, setLoading] = useState(!initialData || initialData.length === 0);
+  const [error, setError] = useState<string | null>(null);
+  const [visibleCount, setVisibleCount] = useState(20);
 
   // Sync state with URL and handle browser back/forward buttons
   useEffect(() => {
@@ -140,8 +142,6 @@ export default function News({ initialData, initialGenres }: { initialData?: Art
     const newUrl = genre === 'All' ? baseUrl : `${baseUrl}?genre=${encodeURIComponent(genre)}`;
     window.history.pushState({}, '', newUrl);
   };
-  const [error, setError] = useState<string | null>(null);
-  const [visibleCount, setVisibleCount] = useState(20);
   const fetchNews = useCallback(async () => {
     // Only show loading if we don't already have articles to display
     if (articles.length === 0) {
